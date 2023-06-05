@@ -11,9 +11,8 @@
 
 
 // Kênh PWM (Chân của các servo và DC motor) điều khiển động cơ (Số chân của động cơ DC hay servo đều gấp đôi số kênh của động cơ đó) (Nếu vẫn sai chân thì invert lại)
-
 //Kênh PWM cho chân thuận (Tay phải)
-#define PWM_DC1A 14 
+#define PWM_DC1A 14
 #define PWM_DC1B 15
 #define PWM_DC4A 12
 #define PWM_DC4B 13
@@ -29,10 +28,8 @@
 #define MOT_RIGHT 2
 #define SHOOTER_1 3
 
-// set tốc độ động cơ 
-//(Công suất được tính theo xung tần theo đơn vị miliseconds = Công xuất mong muốn (Đơn vị %) * 4095)
-#define SPD_FAST 2047 //Nửa công suất
-#define SPD_MAX 4095 //Max công suất
+// set tốc độ động cơ
+#define SPD_FAST 2047
 
 //Khai báo linh kiện
 Adafruit_PWMServoDriver pwm;  //Hoặc Adafruit_PWMServoDriver pwm = new Adafruit_PWMServoDriver();
