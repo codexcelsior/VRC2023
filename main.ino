@@ -30,7 +30,6 @@
 
 // set tốc độ động cơ
 #define SPD_FAST 2047
-#define SPD_MAX 4095
 
 //Khai báo linh kiện
 Adafruit_PWMServoDriver pwm;  //Hoặc Adafruit_PWMServoDriver pwm = new Adafruit_PWMServoDriver();
