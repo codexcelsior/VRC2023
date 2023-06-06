@@ -10,6 +10,7 @@
 #define PS2_ATT 15
 
 
+
 // Kênh PWM (Chân của các servo và DC motor) điều khiển động cơ (Số chân của động cơ DC hay servo đều gấp đôi số kênh của động cơ đó) (Nếu vẫn sai chân thì invert lại)
 //Kênh PWM cho chân thuận (Tay phải)
 #define PWM_DC1A 14
