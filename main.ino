@@ -45,10 +45,11 @@
 
 // Cổng của servo
 #define SRV_INTAKE          0
-#define SRV_DOOR            1
+#define SRV_WHEEL           1
 
 // Tốc độ động cơ
 #define SPD_INTAKE          100 // servo
+#define SPD_WHEEL           90
 
 
 //Khai báo linh kiện
@@ -71,6 +72,10 @@ void setup() {  //Hàm set up chạy khởi tạo một lần khi khởi động
   pwm.setOscillatorFrequency(27000000);  //Đặt tần số xung trong PCA9685 là 27000000 (27MHz) (27 triệu)
   pwm.setPWMFreq(50);                    //Đặt tần số giao động trên chân tối đa 50Hz (Để dùng cho cả Servo) (Pulse Width Modulation)
 }
+  bool intake_toggle = false;
+  bool wheel_toggle = false;
+  bool intake = false;
+  bool wheel = false;
 
 void ctrl_dc(uint8_t motor, int16_t speed) {
   switch (motor) {
@@ -91,15 +96,6 @@ void ctrl_dc(uint8_t motor, int16_t speed) {
       pwm.setPWM(PWM_DC4B, 0, ((speed < 0) ? (-speed) : 0) );
       break;
   }
-}
-
-
-void loop() {
-
-  ps2.read_gamepad();  //Khởi tạo đọc từ điều kiển bằng hàm read_gamepad()
-
-  ctrl_dc(MOT_LEFT, map(ps2.Analog(PSS_LY), 0, 255, -SPD_FAST, SPD_FAST));
-  ctrl_dc(MOT_RIGHT, map(ps2.Analog(PSS_RY), 0, 255, SPD_FAST, -SPD_FAST));
 }
 
 // Hàm điều khiển vị trí servo 180 (nhận số động cơ servo từ 0->4 ứng với kênh PWM 8->12, giá trị góc từ 0 đến 180)
@@ -134,14 +130,24 @@ void ctrl_servo360(uint8_t motor, float speed) {
 void loop() {
     // put your main code here, to run repeatedly: 
     
-    bool intake = True;
-    bool door = True;
+    ps2.read_gamepad();  //Khởi tạo đọc từ điều kiển bằng hàm read_gamepad()
+
+    ctrl_dc(MOT_LEFT, map(ps2.Analog(PSS_LY), 0, 255, -SPD_FAST, SPD_FAST));
+    ctrl_dc(MOT_RIGHT, map(ps2.Analog(PSS_RY), 0, 255, SPD_FAST, -SPD_FAST));
 
     //Hàm mẫu để sử dụng Servo 
-    
-    ctrl_servo360(SRV_INTAKE, (intake) ?  SPD_INTAKE : 0);
-    //ctrl_servo180(cổng, tốc quay);
-    
-    ctrl_servo180(SRV_DOOR, (door) ? 90 : 0);
-    //ctrl_servo180(cổng, góc quay);
+    if (ps2.Button(PSB_R1)){
+      if(!intake_toggled) {
+        intake_toggled = true;
+        intake = !intake;
+        ctrl_servo360(SRV_INTAKE, (intake) ?  SPD_INTAKE : 0);
+    } else intake_toggle = false;
+
+    if (ps2.Button(PSB_R2)){
+      if(wheel_toggle) = true;
+        wheel = !wheel;
+        ctrl_servo360(SRV_WHEEL, (wheel) ? SPD_WHEEL : 0);
+    } else wheel_toggle = false;
+     
+}
 }
