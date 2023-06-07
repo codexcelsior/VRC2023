@@ -142,5 +142,6 @@ void loop() {
     if (ps2.Button(PSB_R2)){
       ctrl_servo360(SRV_WHEEL, (door) ? SPD_WHEEL : 0);
     }
+    
     //ctrl_servo180(cổng, góc quay);
 }
