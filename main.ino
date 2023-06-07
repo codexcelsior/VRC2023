@@ -45,10 +45,11 @@
 
 // Cổng của servo
 #define SRV_INTAKE          0
-#define SRV_DOOR            1
+#define SRV_WHEEL           1
 
 // Tốc độ động cơ
 #define SPD_INTAKE          100 // servo
+#define SPD_WHEEL           90
 
 
 //Khai báo linh kiện
@@ -93,15 +94,6 @@ void ctrl_dc(uint8_t motor, int16_t speed) {
   }
 }
 
-
-void loop() {
-
-  ps2.read_gamepad();  //Khởi tạo đọc từ điều kiển bằng hàm read_gamepad()
-
-  ctrl_dc(MOT_LEFT, map(ps2.Analog(PSS_LY), 0, 255, -SPD_FAST, SPD_FAST));
-  ctrl_dc(MOT_RIGHT, map(ps2.Analog(PSS_RY), 0, 255, SPD_FAST, -SPD_FAST));
-}
-
 // Hàm điều khiển vị trí servo 180 (nhận số động cơ servo từ 0->4 ứng với kênh PWM 8->12, giá trị góc từ 0 đến 180)
 void ctrl_servo180(uint8_t motor, float angle) {
   uint16_t us = (uint16_t) (1000 * (1.0 + angle / 180.0));
@@ -137,11 +129,18 @@ void loop() {
     bool intake = True;
     bool door = True;
 
+    ps2.read_gamepad();  //Khởi tạo đọc từ điều kiển bằng hàm read_gamepad()
+
+    ctrl_dc(MOT_LEFT, map(ps2.Analog(PSS_LY), 0, 255, -SPD_FAST, SPD_FAST));
+    ctrl_dc(MOT_RIGHT, map(ps2.Analog(PSS_RY), 0, 255, SPD_FAST, -SPD_FAST));
+
     //Hàm mẫu để sử dụng Servo 
-    
-    ctrl_servo360(SRV_INTAKE, (intake) ?  SPD_INTAKE : 0);
+    if (ps2.Button(PSB_R1)){
+      ctrl_servo360(SRV_INTAKE, (intake) ?  SPD_INTAKE : 0);
+    }
     //ctrl_servo180(cổng, tốc quay);
-    
-    ctrl_servo180(SRV_DOOR, (door) ? 90 : 0);
+    if (ps2.Button(PSB_R2)){
+      ctrl_servo360(SRV_WHEEL, (door) ? SPD_WHEEL : 0);
+    }
     //ctrl_servo180(cổng, góc quay);
 }
